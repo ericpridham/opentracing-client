@@ -1,0 +1,32 @@
+{
+  "name": "ericpridham/opentracing-client",
+  "description": "Generic PHP OpenTracing implementation",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "none",
+  "authors": [
+    {
+      "name": "Eric Pridham",
+      "email": "eric.pridham+github@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.2",
+    "ext-json": "*",
+    "ramsey/uuid": "^3.8",
+    "opentracing/opentracing": "^1",
+    "nesbot/carbon": "^2.25",
+    "guzzlehttp/guzzle": "^6.3"
+  }
+  ,
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "phpunit/phpunit": "^8.4",
+    "mockery/mockery": "^1.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "OpenTracingClient\\": "src/OpenTracingClient"
+    }
+  }
+}
