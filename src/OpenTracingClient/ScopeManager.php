@@ -39,7 +39,7 @@ final class ScopeManager implements OTScopeManager
     {
         foreach ($this->scopes as $scopeIndex => $scopeItem) {
             if ($scope === $scopeItem) {
-                unset($this->scopes[$scopeIndex]);
+                array_splice($this->scopes, $scopeIndex, 1);
             }
         }
     }

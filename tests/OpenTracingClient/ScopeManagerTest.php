@@ -8,14 +8,20 @@ use PHPUnit\Framework\TestCase;
 
 final class ScopeManagerTest extends TestCase
 {
-    public function testGetActiveFailsWithNoActiveSpans(): void
+    /**
+     * @test
+     */
+    public function it_returns_null_if_no_active_spans(): void
     {
         $scopeManager = new ScopeManager();
 
         $this->assertNull($scopeManager->getActive());
     }
 
-    public function testActivateSuccess(): void
+    /**
+     * @test
+     */
+    public function it_can_activate_a_span(): void
     {
         $tracer = new Tracer();
         $span = $tracer->startSpan('name');
@@ -25,35 +31,24 @@ final class ScopeManagerTest extends TestCase
         $this->assertSame($span, $scopeManager->getActive()->getSpan());
     }
 
-    public function testGetScopeReturnsNull(): void
+    /**
+     * @test
+     */
+    public function it_can_deactivate_a_span(): void
     {
         $tracer = new Tracer();
-        $tracer->startSpan('name');
         $scopeManager = new ScopeManager();
 
-        $this->assertNull($scopeManager->getActive());
-    }
+        $scope1 = $scopeManager->activate($tracer->startSpan('name1'));
+        $scope2 = $scopeManager->activate($tracer->startSpan('name2'));
+        $scope3 = $scopeManager->activate($tracer->startSpan('name3'));
 
-    public function testGetScopeSuccess(): void
-    {
-        $tracer = new Tracer();
-        $span = $tracer->startSpan('name');
-        $scopeManager = new ScopeManager();
-        $scopeManager->activate($span);
-        $scope = $scopeManager->getActive();
+        $scopeManager->deactivate($scope2);
 
-        $this->assertSame($span, $scope->getSpan());
-    }
+        $this->assertSame($scope3, $scopeManager->getActive());
 
-    public function testDeactivateSuccess(): void
-    {
-        $tracer = new Tracer();
-        $span = $tracer->startSpan('name');
-        $scopeManager = new ScopeManager();
-        $scopeManager->activate($span);
-        $scope = $scopeManager->getActive();
-        $scopeManager->deactivate($scope);
+        $scopeManager->deactivate($scope3);
 
-        $this->assertNull($scopeManager->getActive());
+        $this->assertSame($scope1, $scopeManager->getActive());
     }
 }
