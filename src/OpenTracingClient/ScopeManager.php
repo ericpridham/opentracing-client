@@ -6,7 +6,7 @@ use OpenTracing\Scope as OTScope;
 use OpenTracing\ScopeManager as OTScopeManager;
 use OpenTracing\Span as OTSpan;
 
-final class ScopeManager implements OTScopeManager
+class ScopeManager implements OTScopeManager
 {
     /**
      * @var array|OTScope[]
@@ -18,7 +18,7 @@ final class ScopeManager implements OTScopeManager
      */
     public function activate(OTSpan $span, $finishSpanOnClose = OTScopeManager::DEFAULT_FINISH_SPAN_ON_CLOSE)
     {
-        $scope = new Scope($this, $span, $finishSpanOnClose);
+        $scope = new Scope($span, $finishSpanOnClose);
         $this->scopes[] = $scope;
         return $scope;
     }
@@ -28,19 +28,19 @@ final class ScopeManager implements OTScopeManager
      */
     public function getActive()
     {
+        $this->popClosedScopes();
+
         if (empty($this->scopes)) {
             return null;
         }
 
-        return $this->scopes[count($this->scopes) - 1];
+        return $this->scopes[array_key_last($this->scopes)];
     }
 
-    public function deactivate(Scope $scope)
+    private function popClosedScopes(): void
     {
-        foreach ($this->scopes as $scopeIndex => $scopeItem) {
-            if ($scope === $scopeItem) {
-                array_splice($this->scopes, $scopeIndex, 1);
-            }
+        while (array_key_last($this->scopes) !== null && $this->scopes[array_key_last($this->scopes)]->isClosed()) {
+            array_pop($this->scopes);
         }
     }
 }

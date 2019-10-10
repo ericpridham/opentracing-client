@@ -5,7 +5,7 @@ namespace OpenTracingClient;
 use OpenTracing\Scope as OTScope;
 use OpenTracing\Span as OTSpan;
 
-final class Scope implements OTScope
+class Scope implements OTScope
 {
     /**
      * @var OTSpan
@@ -13,28 +13,23 @@ final class Scope implements OTScope
     private $span;
 
     /**
-     * @var ScopeManager
-     */
-    private $scopeManager;
-
-    /**
      * @var bool
      */
     private $finishSpanOnClose;
+
+    /** @var bool */
+    private $closed;
 
     /**
      * @param ScopeManager $scopeManager
      * @param OTSpan $span
      * @param bool $finishSpanOnClose
      */
-    public function __construct(
-        ScopeManager $scopeManager,
-        OTSpan $span,
-        $finishSpanOnClose
-    ) {
-        $this->scopeManager = $scopeManager;
+    public function __construct(OTSpan $span, $finishSpanOnClose)
+    {
         $this->span = $span;
         $this->finishSpanOnClose = $finishSpanOnClose;
+        $this->closed = false;
     }
 
     /**
@@ -46,7 +41,7 @@ final class Scope implements OTScope
             $this->span->finish();
         }
 
-        $this->scopeManager->deactivate($this);
+        $this->closed = true;
     }
 
     /**
@@ -56,5 +51,10 @@ final class Scope implements OTScope
     public function getSpan()
     {
         return $this->span;
+    }
+
+    public function isClosed(): bool
+    {
+        returN $this->closed;
     }
 }

@@ -6,7 +6,7 @@ use OpenTracingClient\ScopeManager;
 use OpenTracingClient\Tracer;
 use PHPUnit\Framework\TestCase;
 
-final class ScopeManagerTest extends TestCase
+class ScopeManagerTest extends TestCase
 {
     /**
      * @test
@@ -34,21 +34,22 @@ final class ScopeManagerTest extends TestCase
     /**
      * @test
      */
-    public function it_can_deactivate_a_span(): void
+    public function it_automatically_deactivates_finished_spans(): void
     {
         $tracer = new Tracer();
         $scopeManager = new ScopeManager();
 
         $scope1 = $scopeManager->activate($tracer->startSpan('name1'));
         $scope2 = $scopeManager->activate($tracer->startSpan('name2'));
-        $scope3 = $scopeManager->activate($tracer->startSpan('name3'));
 
-        $scopeManager->deactivate($scope2);
+        $this->assertSame($scope2, $scopeManager->getActive());
 
-        $this->assertSame($scope3, $scopeManager->getActive());
-
-        $scopeManager->deactivate($scope3);
+        $scope2->close();
 
         $this->assertSame($scope1, $scopeManager->getActive());
+
+        $scope1->close();
+
+        $this->assertNull($scopeManager->getActive());
     }
 }
