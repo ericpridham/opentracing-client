@@ -12,7 +12,7 @@ class SpanContextTest extends TestCase
      */
     public function it_can_create_a_span_context(): void
     {
-        $spanContext = SpanContext::create( 'trace_id', 'span_id', 'parent_id', true, ['key' => 'value'] );
+        $spanContext = SpanContext::create('trace_id', 'span_id', 'parent_id', true, ['key' => 'value']);
 
         $this->assertEquals('trace_id', $spanContext->getTraceId());
         $this->assertEquals('span_id', $spanContext->getSpanId());
@@ -40,7 +40,7 @@ class SpanContextTest extends TestCase
      */
     public function it_can_add_context_with_baggage(): void
     {
-        $spanContext = SpanContext::create( 'test_trace_id', 'test_span_id', true );
+        $spanContext = SpanContext::create('test_trace_id', 'test_span_id', true);
         $this->assertEmpty(iterator_to_array($spanContext));
 
         $spanContext = $spanContext->withBaggageItem('test_key', 'test_value');

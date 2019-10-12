@@ -2,6 +2,7 @@
 
 namespace Tests\OpenTracingClient;
 
+use Mockery;
 use OpenTracing\Exceptions\UnsupportedFormat;
 use OpenTracing\NoopSpan;
 use OpenTracing\Span as OTSpan;
@@ -31,12 +32,15 @@ class TracerTest extends TestCase
     {
         $tracer = new Tracer;
         $parentScope = $tracer->startActiveSpan('parent');
+        $parentScope->getSpan()->addBaggageItem('baggage', 'item');
         $childScope = $tracer->startActiveSpan('child');
 
         $this->assertEquals(
             $parentScope->getSpan()->getContext()->getSpanId(),
             $childScope->getSpan()->getContext()->getParentId()
         );
+
+        $this->assertEquals('item', $childScope->getSpan()->getContext()->getBaggageItem('baggage'));
     }
 
     /**
@@ -141,7 +145,7 @@ class TracerTest extends TestCase
     {
         $tracer = new Tracer();
 
-        $transport = \Mockery::mock(TransportInterface::class);
+        $transport = Mockery::mock(TransportInterface::class);
         $transport->shouldReceive('send');
 
         $tracer->registerTransport($transport);

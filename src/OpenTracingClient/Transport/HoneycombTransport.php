@@ -12,9 +12,9 @@ class HoneycombTransport implements TransportInterface
      */
     private $client;
 
-    public function __construct(HoneycombClient $client = null)
+    public function __construct(HoneycombClient $client)
     {
-        $this->client = $client??new HoneycombClient(config('honeycomb.apiKey'), config('honeycomb.dataset'));
+        $this->client = $client;
     }
 
     /**
@@ -41,6 +41,7 @@ class HoneycombTransport implements TransportInterface
             'startTime' => $span->getStartTime()->toJSON(),
             'finishTime' => $span->isFinished()?$span->getFinishTime()->toJSON(): null,
         ];
+        // baggage
         foreach ($span->getContext() as $item => $value) {
             $data[$item] = $value;
         }
