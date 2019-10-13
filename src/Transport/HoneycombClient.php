@@ -2,6 +2,7 @@
 
 namespace OpenTracingClient\Transport;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 
 class HoneycombClient
@@ -15,7 +16,7 @@ class HoneycombClient
      */
     private $dataset;
     /**
-     * @var \GuzzleHttp\Client|ClientInterface
+     * @var Client|ClientInterface
      */
     private $client;
 
@@ -23,7 +24,7 @@ class HoneycombClient
     {
         $this->apiKey = $apiKey;
         $this->dataset = $dataset;
-        $this->client = $client ?? new \GuzzleHttp\Client();
+        $this->client = $client ?? new Client();
     }
 
     public function send(string $payload)

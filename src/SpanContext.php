@@ -3,10 +3,11 @@
 namespace OpenTracingClient;
 
 use ArrayIterator;
+use JsonSerializable;
 use OpenTracing\SpanContext as OTSpanContext;
 use Ramsey\Uuid\Uuid;
 
-final class SpanContext implements OTSpanContext, \JsonSerializable
+final class SpanContext implements OTSpanContext, JsonSerializable
 {
     /**
      * @var string

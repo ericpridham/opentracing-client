@@ -4,10 +4,11 @@ namespace OpenTracingClient;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
+use JsonSerializable;
 use OpenTracing\Span as OTSpan;
 use OpenTracing\SpanContext as OTSpanContext;
 
-class Span implements OTSpan, \JsonSerializable
+class Span implements OTSpan, JsonSerializable
 {
     /**
      * @var string

@@ -4,9 +4,9 @@ namespace OpenTracingClient;
 
 use OpenTracing\Exceptions\UnsupportedFormat;
 use OpenTracing\ScopeManager as OTScopeManager;
+use OpenTracing\SpanContext as OTSpanContext;
 use OpenTracing\StartSpanOptions as OTStartSpanOptions;
 use OpenTracing\Tracer as OTTracer;
-use OpenTracing\SpanContext as OTSpanContext;
 
 class Tracer implements OTTracer
 {

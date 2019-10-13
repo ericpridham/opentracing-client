@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Unit\Services\Opentracing\Transport;
 
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use Mockery;
 use OpenTracingClient\Span;
 use OpenTracingClient\SpanContext;
 use OpenTracingClient\Transport\HoneycombClient;
@@ -15,7 +15,7 @@ class HoneycombTransportTest extends TestCase
     /** @test */
     public function it_builds_the_right_span_structure(): void
     {
-        $transport = new HoneycombTransport(\Mockery::spy(HoneycombClient::class));
+        $transport = new HoneycombTransport(Mockery::spy(HoneycombClient::class));
 
         $startTime = CarbonImmutable::now();
         $finishTime = $startTime->addMilliseconds(250);
@@ -47,7 +47,7 @@ class HoneycombTransportTest extends TestCase
     /** @test */
     public function it_sends_the_spans_to_honeycomb(): void
     {
-        $client = \Mockery::spy(HoneycombClient::class);
+        $client = Mockery::spy(HoneycombClient::class);
         $transport = new HoneycombTransport($client);
 
         $span = new Span('span', SpanContext::create('trace-id', 'span-id'), CarbonImmutable::now());
