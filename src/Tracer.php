@@ -156,8 +156,9 @@ class Tracer implements OTTracer
     public function trace(string $name, callable $function)
     {
         $scope = $this->startActiveSpan($name);
-        $function();
+        $response = $function();
         $scope->close();
+        return $response;
     }
 
     public function registerTransport(TransportInterface $param)
