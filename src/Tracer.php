@@ -153,6 +153,13 @@ class Tracer implements OTTracer
         return null;
     }
 
+    public function trace(string $name, callable $function)
+    {
+        $scope = $this->startActiveSpan($name);
+        $function();
+        $scope->close();
+    }
+
     public function registerTransport(TransportInterface $param)
     {
         $this->transports[] = $param;
